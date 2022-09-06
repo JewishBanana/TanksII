@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;entities.weapons&apos; to &apos;entities.projectiles&apos;&#x0D;&#x0A;- Original project: &apos;Tanks II&apos;&#x0D;&#x0A;- Original element: &apos;Tanks II/src/entities.weapons&apos;&#x0D;&#x0A;- Renamed element: &apos;Tanks II/src/entities.projectiles&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;entities.weapons&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src&lt;entities.weapons" name="entities.projectiles" qualified="false" references="true" stamp="1659052097744" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,85 @@
+package general;
+
+import java.awt.Graphics;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Queue;
+
+import entities.GameObject;
+import entities.particles.Particle;
+
+public class Handler {
+	
+	private Queue<GameObject> objectlist = new ArrayDeque<>();
+	private Queue<Particle> particlesList = new ArrayDeque<>();
+	private Level level;
+	private Camera cam;
+	
+	private Queue<GameObject> objectAddQueueList = new ArrayDeque<>();
+	private Queue<GameObject> objectRemoveQueueList = new ArrayDeque<>();
+	private Queue<Particle> particleAddQueueList = new ArrayDeque<>();
+	private Queue<Particle> particleRemoveQueueList = new ArrayDeque<>();
+	
+	public void tick() {
+		Iterator<GameObject> handlerIterator = objectlist.iterator();
+		while (handlerIterator.hasNext()) {
+			GameObject obj = handlerIterator.next();
+			if (obj == null || obj.isShouldRemove())
+				handlerIterator.remove();
+			else
+				obj.tick(level);
+		}
+		objectlist.removeAll(objectRemoveQueueList);
+		objectRemoveQueueList.clear();
+		objectlist.addAll(objectAddQueueList);
+		objectAddQueueList.clear();
+		
+		Iterator<Particle> particleIterator = particlesList.iterator();
+		while (particleIterator.hasNext()) {
+			Particle particle = particleIterator.next();
+			if (particle == null || particle.lifeTicks <= 0)
+				particleIterator.remove();
+			else
+				particle.lifeTicks--;
+		}
+		particlesList.removeAll(particleAddQueueList);
+		particleAddQueueList.clear();
+		particlesList.addAll(particleRemoveQueueList);
+		particleRemoveQueueList.clear();
+	}
+	public void render(Graphics g) {
+		for (GameObject obj : objectlist)
+			if (obj.getX()+obj.getWidth() >= cam.getX() && obj.getX() <= cam.getFarX() && obj.getY()+obj.getHeight() >= cam.getY() && obj.getY() <= cam.getFarY() && !obj.isShouldRemove())
+				obj.render(g);
+		for (Particle particle : particlesList)
+			if (particle.getX()+particle.getWidth() >= cam.getX() && particle.getX() <= cam.getFarX() && particle.getY()+particle.getHeight() >= cam.getY() && particle.getY() <= cam.getFarY())
+				particle.render(g);
+	}
+	public void addObject(GameObject tempObject) {
+		objectAddQueueList.add(tempObject);
+	}
+	public void removeObject(GameObject tempObject) {
+		objectRemoveQueueList.remove(tempObject);
+	}
+	public void addParticle(Particle particle) {
+		particleAddQueueList.add(particle);
+	}
+	public void removeParticle(Particle particle) {
+		particleRemoveQueueList.remove(particle);
+	}
+	public Level getLevel() {
+		return level;
+	}
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+	public Camera getCam() {
+		return cam;
+	}
+	public void setCam(Camera cam) {
+		this.cam = cam;
+	}
+	public Queue<GameObject> getObjectList() {
+		return objectlist;
+	}
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
+    <fullyQualifiedTypeName name="javax.imageio.ImageIO"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="objects.Box"/>
+    <fullyQualifiedTypeName name="input.KeyInput"/>
+    <fullyQualifiedTypeName name="java.awt.Rectangle"/>
+    <fullyQualifiedTypeName name="java.awt.Graphics"/>
+    <fullyQualifiedTypeName name="objects.tiles.BoxTile"/>
+    <fullyQualifiedTypeName name="entities.Player"/>
+    <fullyQualifiedTypeName name="objects.tiles.VoidTile"/>
+    <fullyQualifiedTypeName name="objects.tiles.FloorTile"/>
+    <fullyQualifiedTypeName name="input.MouseInput"/>
+    <fullyQualifiedTypeName name="util.Utils"/>
+    <fullyQualifiedTypeName name="general.Level"/>
+    <fullyQualifiedTypeName name="objects.TileType"/>
+    <fullyQualifiedTypeName name="objects.Tile"/>
+    <fullyQualifiedTypeName name="java.util.Iterator"/>
+    <fullyQualifiedTypeName name="objects.TileFace"/>
+    <fullyQualifiedTypeName name="general.GameObject"/>
+    <fullyQualifiedTypeName name="entities.Enemy"/>
+    <fullyQualifiedTypeName name="general.ID"/>
+    <fullyQualifiedTypeName name="entities.tanks.BrownTank"/>
+    <fullyQualifiedTypeName name="entities.GameObject"/>
+    <fullyQualifiedTypeName name="general.Handler"/>
+    <fullyQualifiedTypeName name="entities.LivingEntity"/>
+    <fullyQualifiedTypeName name="entities.projectiles.RayCast"/>
+    <fullyQualifiedTypeName name="general.Game"/>
+    <fullyQualifiedTypeName name="entities.particles.Particle"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="java.util.ArrayDeque"/>
+</qualifiedTypeNameHistroy>

@@ -1,0 +1,58 @@
+package entities.projectiles;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import entities.GameObject;
+import entities.LivingEntity;
+import entities.particles.Particle;
+import general.Game;
+import general.Level;
+import objects.TileFace;
+
+public class RayCast extends GameObject {
+	
+	private GameObject shooter;
+
+	public RayCast(Level level, double x, double y, double width, double height, GameObject shooter) {
+		super(level, x, y, width, height);
+		this.shooter = shooter;
+	}
+	@Override
+	public void tick(Level level) {
+	}
+	@Override
+	public void render(Graphics g) {
+	}
+	public boolean doesCastHit(GameObject target, double velX, double velY, int bounces, int immuneFrames) {
+		this.velX = velX;
+		this.velY = velY;
+		double simX = x;
+		double simY = y;
+		for (int i=0; i < 30; i++) {
+			Game.handler.addParticle(new Particle(level, simX, simY, width, height, 120, Color.green));
+			simX += velX;
+			simY += velY;
+			TileFace face = simulateMapCollsions(false);
+			if (face == TileFace.RIGHT || face == TileFace.LEFT) {
+				velX *= -1;
+				bounces--;
+				if (bounces <= 0)
+					return false;
+			} else if (face == TileFace.UP || face == TileFace.DOWN) {
+				velY *= -1;
+				bounces--;
+				if (bounces <= 0)
+					return false;
+			}
+			for (GameObject obj : Game.handler.getObjectList())
+				if (obj instanceof LivingEntity && obj.collides(simX, simY, width, height)) {
+					if (obj.equals(shooter) && immuneFrames > 0)
+						break;
+					return obj.equals(target);
+				}
+			immuneFrames--;
+		}
+		return false;
+	}
+}

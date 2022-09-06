@@ -1,0 +1,56 @@
+package entities;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import general.Level;
+import input.KeyInput;
+import util.Utils;
+
+public class Player extends LivingEntity {
+	
+	private double _acc = 1.0;
+	private double _dcc = 0.5;
+	private KeyInput input;
+
+	public Player(Level level, double x, double y, double width, double height, ID id) {
+		super(level, x, y, width, height, id);
+		this.health = 10;
+	}
+
+	@Override
+	public void tick(Level level) {
+		move();
+		
+		simulateMapCollsions(true);
+		x += velX;
+		y += velY;
+	}
+	
+	@Override
+	public void render(Graphics g) {
+		g.setColor(Color.white);
+		g.fillRect((int)x, (int)y, (int)width, (int)height);
+	}
+	public void setController(KeyInput input) {
+		this.input = input;
+	}
+	private void move() {
+		if (input.keys[0]) velX += _acc;
+		else if (input.keys[1]) velX -= _acc;
+		else if (!(input.keys[0]) && !input.keys[1]) {
+			if (velX > 0) velX -= _dcc;
+			else if (velX < 0) velX += _dcc;
+		}
+		
+		if (input.keys[3]) velY += _acc;
+		else if (input.keys[2]) velY -= _acc;
+		else if (!(input.keys[2]) && !input.keys[3]) {
+			if (velY > 0) velY -= _dcc;
+			else if (velY < 0) velY += _dcc;
+		}
+		
+		velX = Utils.clamp(velX, -5, 5);
+		velY = Utils.clamp(velY, -5, 5);
+	}
+}

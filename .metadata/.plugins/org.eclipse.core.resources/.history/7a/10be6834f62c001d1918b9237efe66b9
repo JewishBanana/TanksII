@@ -1,0 +1,162 @@
+package entities;
+
+import java.awt.Graphics;
+
+import entities.projectiles.Bullet;
+import entities.projectiles.RayCast;
+import general.Game;
+import general.Level;
+import objects.Tile;
+import objects.TileFace;
+
+public abstract class GameObject {
+	protected double x, y;
+	protected double velX, velY;
+	protected double width,height;
+	protected ID id;
+	protected Level level;
+	protected boolean shouldRemove;
+	
+	public GameObject(Level level, double x, double y, double width, double height, ID id) {
+		this.level = level;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.id = id;
+	}
+	public GameObject(Level level, double x, double y, double width, double height) {
+		this.level = level;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+	
+	public abstract void tick(Level level);
+	public abstract void render(Graphics g);
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getVelX() {
+		return velX;
+	}
+
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+
+	public double getVelY() {
+		return velY;
+	}
+
+	public void setVelY(double velY) {
+		this.velY = velY;
+	}
+	
+	public void setVelocity(double velX, double velY) {
+		this.velX = velX;
+		this.velY = velY;
+	}
+	
+	public ID getId() {
+		return id;
+	}
+
+	public void setId(ID id) {
+		this.id = id;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	public boolean isShouldRemove() {
+		return shouldRemove;
+	}
+	public void setShouldRemove(boolean shouldRemove) {
+		this.shouldRemove = shouldRemove;
+	}
+	public boolean collides(double tempX, double tempY, double tempWidth, double tempHeight) {
+		return (tempX+tempWidth > x && tempX < x+width && tempY+tempHeight > y && tempY < y+height);
+	}
+	public TileFace simulateMapCollsions(boolean patchVelocity) {
+		double farX = x+width, farY = y+height;
+		TileFace face = null;
+		Tile tile = level.getTile(x+velX, y+5);
+		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velX && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+			if (updateVelocity)
+				velX = tile.getX()+tile.getWidth() - x;
+			face = TileFace.LEFT;
+		}
+		tile = level.getTile(x+velX, farY-5);
+		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velX && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+			if (updateVelocity)
+				velX = tile.getX()+tile.getWidth() - x;
+			face = TileFace.LEFT;
+		}
+		tile = level.getTile(farX+velX, y+5);
+		if (tile.isSolid() && farX+velX > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+			if (updateVelocity)
+				velX = tile.getX() - farX;
+			face = TileFace.RIGHT;
+		}
+		tile = level.getTile(farX+velX, farY-5);
+		if (tile.isSolid() && farX+velX > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+			if (updateVelocity)
+				velX = tile.getX() - farX;
+			face = TileFace.RIGHT;
+		}
+		
+		tile = level.getTile(x+5, y+velY);
+		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velY && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+			if (updateVelocity)
+				velY = tile.getY()+tile.getHeight() - y;
+			face = TileFace.UP;
+		}
+		tile = level.getTile(farX-5, y+velY);
+		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velY && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+			if (updateVelocity)
+				velY = tile.getY()+tile.getHeight() - y;
+			face = TileFace.UP;
+		}
+		tile = level.getTile(x+5, farY+velY);
+		if (tile.isSolid() && farY+velY > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+			if (updateVelocity)
+				velY = tile.getY() - farY;
+			face = TileFace.DOWN;
+		}
+		tile = level.getTile(farX-5, farY+velY);
+		if (tile.isSolid() && farY+velY > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+			if (updateVelocity)
+				velY = tile.getY() - farY;
+			face = TileFace.DOWN;
+		}
+		return face;
+	}
+}

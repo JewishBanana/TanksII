@@ -1,0 +1,35 @@
+package entities;
+
+import java.awt.Color;
+
+import entities.particles.Particle;
+import entities.projectiles.RayCast;
+import general.Game;
+import general.Level;
+
+public class Enemy extends LivingEntity {
+	
+	protected LivingEntity target;
+
+	public Enemy(Level level, double x, double y, double width, double height, ID id) {
+		super(level, x, y, width, height, id);
+	}
+
+	public LivingEntity getTarget() {
+		return target;
+	}
+
+	public void setTarget(LivingEntity target) {
+		this.target = target;
+	}
+	public RayCast rayCastForTarget(double size, int bounces, int immuneFrames) {
+		double angle = Math.PI/10;
+		RayCast cast = new RayCast(level, x+(width/2), y+(height/2), size, size, this);
+		for (int i=0; i < 20; i++) {
+			Game.handler.addParticle(new Particle(level, x+Math.cos(i*angle)*2, y+Math.sin(i*angle)*2, 5, 5, 120, Color.blue));
+			if (cast.doesCastHit(target, Math.cos(i*angle)*2, Math.sin(i*angle)*2, bounces, immuneFrames))
+				return cast;
+		}
+		return null;
+	}
+}
