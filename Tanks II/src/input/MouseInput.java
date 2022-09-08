@@ -5,9 +5,10 @@ import java.awt.event.MouseEvent;
 
 import entities.GameObject;
 import entities.ID;
-import entities.projectiles.Bullet;
+import entities.projectiles.Projectile;
 import general.Camera;
 import general.Handler;
+import util.Velocity;
 
 public class MouseInput extends MouseAdapter {
 	
@@ -27,14 +28,13 @@ public class MouseInput extends MouseAdapter {
 		int my = e.getY();
 		
 		if (tempPlayer != null) {
-			GameObject tempBullet = new Bullet(handler.getLevel(), tempPlayer.getX()+32, tempPlayer.getY()+32, 8, 8, ID.BULLET, tempPlayer);
+			GameObject tempBullet = new Projectile(handler.getLevel(), tempPlayer.getX()+32, tempPlayer.getY()+32, 8, 8, ID.BULLET, tempPlayer);
 			handler.addObject(tempBullet);
 			
 			float angle = (float) Math.atan2(my - tempPlayer.getY()-16+cam.getY(), mx - tempPlayer.getX()-16+cam.getX());
 			int bulletVel = 10;
 			
-			tempBullet.setVelX((float) ((bulletVel) * Math.cos(angle)));
-			tempBullet.setVelY((float) ((bulletVel) * Math.sin(angle)));
+			tempBullet.setVelocity(new Velocity((float) ((bulletVel) * Math.cos(angle)), (float) ((bulletVel) * Math.sin(angle))));
 		}
 	}
 }

@@ -9,6 +9,7 @@ import entities.particles.Particle;
 import general.Game;
 import general.Level;
 import objects.TileFace;
+import util.Velocity;
 
 public class RayCast extends GameObject {
 	
@@ -25,28 +26,27 @@ public class RayCast extends GameObject {
 	@Override
 	public void render(Graphics g) {
 	}
-	public boolean simulateCast(GameObject target, double velX, double velY, int maxBounces, int immuneFrames, int lifeSpan) {
-		this.velX = velX;
-		this.velY = velY;
+	public boolean simulateCast(GameObject target, Velocity castVelocity, int maxBounces, int immuneFrames, int lifeSpan) {
+		this.velocity = castVelocity.clone();
 		for (int i=0; i < lifeSpan; i++) {
-			x += velX;
-			y += velY;
 			TileFace face = simulateMapCollsions(false);
 			if (face == null)
-				Game.handler.addParticle(new Particle(level, x, y, width, height, 120, Color.green));
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.green));
 			else
-				Game.handler.addParticle(new Particle(level, x, y, width, height, 120, Color.blue));
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.blue));
 			if (face == TileFace.RIGHT || face == TileFace.LEFT) {
-				velX *= -1;
+				castVelocity.reverseXVel();
 				bounces++;
 				if (bounces > maxBounces)
 					return false;
 			} else if (face != null) {
-				velY *= -1;
+				castVelocity.reverseYVel();
 				bounces++;
 				if (bounces > maxBounces)
 					return false;
 			}
+			x += castVelocity.getX();
+			y += castVelocity.getY();
 			for (GameObject obj : Game.handler.getObjectList())
 				if (obj instanceof LivingEntity && obj.collides(x, y, width, height)) {
 					if (obj.equals(shooter) && immuneFrames > 0)

@@ -2,16 +2,14 @@ package entities;
 
 import java.awt.Graphics;
 
-import entities.projectiles.Bullet;
-import entities.projectiles.RayCast;
-import general.Game;
 import general.Level;
 import objects.Tile;
 import objects.TileFace;
+import util.Velocity;
 
 public abstract class GameObject {
 	protected double x, y;
-	protected double velX, velY;
+	protected Velocity velocity = new Velocity(0, 0);
 	protected double width,height;
 	protected ID id;
 	protected Level level;
@@ -39,60 +37,36 @@ public abstract class GameObject {
 	public double getX() {
 		return x;
 	}
-
 	public void setX(double x) {
 		this.x = x;
 	}
-
 	public double getY() {
 		return y;
 	}
-
 	public void setY(double y) {
 		this.y = y;
 	}
-
-	public double getVelX() {
-		return velX;
+	public Velocity getVelocity() {
+		return velocity.clone();
 	}
-
-	public void setVelX(double velX) {
-		this.velX = velX;
+	public void setVelocity(Velocity velocity) {
+		this.velocity = velocity;
 	}
-
-	public double getVelY() {
-		return velY;
-	}
-
-	public void setVelY(double velY) {
-		this.velY = velY;
-	}
-	
-	public void setVelocity(double velX, double velY) {
-		this.velX = velX;
-		this.velY = velY;
-	}
-	
 	public ID getId() {
 		return id;
 	}
-
 	public void setId(ID id) {
 		this.id = id;
 	}
-
 	public double getWidth() {
 		return width;
 	}
-
 	public void setWidth(double width) {
 		this.width = width;
 	}
-
 	public double getHeight() {
 		return height;
 	}
-
 	public void setHeight(double height) {
 		this.height = height;
 	}
@@ -108,55 +82,59 @@ public abstract class GameObject {
 	public TileFace simulateMapCollsions(boolean patchVelocity) {
 		double farX = x+width, farY = y+height;
 		TileFace face = null;
-		Tile tile = level.getTile(x+velX, y+5);
-		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velX && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+		Tile tile = level.getTile(x+velocity.getX(), y+5);
+		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velocity.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
 			if (patchVelocity)
-				velX = tile.getX()+tile.getWidth() - x;
+				velocity.setX(tile.getX()+tile.getWidth() - x);
 			face = TileFace.LEFT;
 		}
-		tile = level.getTile(x+velX, farY-5);
-		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velX && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+		tile = level.getTile(x+velocity.getX(), farY-5);
+		if (tile.isSolid() && tile.getX()+tile.getWidth() > x+velocity.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
 			if (patchVelocity)
-				velX = tile.getX()+tile.getWidth() - x;
+				velocity.setX(tile.getX()+tile.getWidth() - x);
 			face = TileFace.LEFT;
 		}
-		tile = level.getTile(farX+velX, y+5);
-		if (tile.isSolid() && farX+velX > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+		tile = level.getTile(farX+velocity.getX(), y+5);
+		if (tile.isSolid() && farX+velocity.getX() > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
 			if (patchVelocity)
-				velX = tile.getX() - farX;
+				velocity.setX(tile.getX() - farX);
 			face = TileFace.RIGHT;
 		}
-		tile = level.getTile(farX+velX, farY-5);
-		if (tile.isSolid() && farX+velX > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
+		tile = level.getTile(farX+velocity.getX(), farY-5);
+		if (tile.isSolid() && farX+velocity.getX() > tile.getX() && tile.getY()+tile.getHeight() >= y && tile.getY() <= farY) {
 			if (patchVelocity)
-				velX = tile.getX() - farX;
+				velocity.setX(tile.getX() - farX);
 			face = TileFace.RIGHT;
 		}
 		
-		tile = level.getTile(x+5, y+velY);
-		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velY && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+		tile = level.getTile(x+5, y+velocity.getY());
+		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velocity.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
 			if (patchVelocity)
-				velY = tile.getY()+tile.getHeight() - y;
+				velocity.setY(tile.getY()+tile.getHeight() - y);
 			face = TileFace.UP;
 		}
-		tile = level.getTile(farX-5, y+velY);
-		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velY && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+		tile = level.getTile(farX-5, y+velocity.getY());
+		if (tile.isSolid() && tile.getY()+tile.getHeight() > y+velocity.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
 			if (patchVelocity)
-				velY = tile.getY()+tile.getHeight() - y;
+				velocity.setY(tile.getY()+tile.getHeight() - y);
 			face = TileFace.UP;
 		}
-		tile = level.getTile(x+5, farY+velY);
-		if (tile.isSolid() && farY+velY > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+		tile = level.getTile(x+5, farY+velocity.getY());
+		if (tile.isSolid() && farY+velocity.getY() > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
 			if (patchVelocity)
-				velY = tile.getY() - farY;
+				velocity.setY(tile.getY() - farY);
 			face = TileFace.DOWN;
 		}
-		tile = level.getTile(farX-5, farY+velY);
-		if (tile.isSolid() && farY+velY > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
+		tile = level.getTile(farX-5, farY+velocity.getY());
+		if (tile.isSolid() && farY+velocity.getY() > tile.getY() && tile.getX()+tile.getWidth() >= x && tile.getX() <= farX) {
 			if (patchVelocity)
-				velY = tile.getY() - farY;
+				velocity.setY(tile.getY() - farY);
 			face = TileFace.DOWN;
 		}
 		return face;
+	}
+	public void addVelocity() {
+		x += velocity.getX();
+		y += velocity.getY();
 	}
 }

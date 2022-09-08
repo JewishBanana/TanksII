@@ -23,8 +23,7 @@ public class Player extends LivingEntity {
 		move();
 		
 		simulateMapCollsions(true);
-		x += velX;
-		y += velY;
+		addVelocity();
 	}
 	
 	@Override
@@ -36,21 +35,21 @@ public class Player extends LivingEntity {
 		this.input = input;
 	}
 	private void move() {
-		if (input.keys[0]) velX += _acc;
-		else if (input.keys[1]) velX -= _acc;
+		if (input.keys[0]) velocity.setX(velocity.getX()+_acc);
+		else if (input.keys[1]) velocity.setX(velocity.getX()-_acc);
 		else if (!(input.keys[0]) && !input.keys[1]) {
-			if (velX > 0) velX -= _dcc;
-			else if (velX < 0) velX += _dcc;
+			if (velocity.getX() > 0) velocity.setX(velocity.getX()-_dcc);
+			else if (velocity.getX() < 0) velocity.setX(velocity.getX()+_dcc);
 		}
 		
-		if (input.keys[3]) velY += _acc;
-		else if (input.keys[2]) velY -= _acc;
+		if (input.keys[3]) velocity.setY(velocity.getY()+_acc);
+		else if (input.keys[2]) velocity.setY(velocity.getY()-_acc);
 		else if (!(input.keys[2]) && !input.keys[3]) {
-			if (velY > 0) velY -= _dcc;
-			else if (velY < 0) velY += _dcc;
+			if (velocity.getY() > 0) velocity.setY(velocity.getY()-_dcc);
+			else if (velocity.getY() < 0) velocity.setY(velocity.getY()+_dcc);
 		}
 		
-		velX = Utils.clamp(velX, -5, 5);
-		velY = Utils.clamp(velY, -5, 5);
+		velocity.setX(Utils.clamp(velocity.getX(), -5, 5));
+		velocity.setY(Utils.clamp(velocity.getY(), -5, 5));
 	}
 }

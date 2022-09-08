@@ -1,2 +1,4 @@
 1662367336764	Rename field 'objectlist'
 1662422791080	Rename method 'doesCastHit'
+1662597676195	Rename local variable 'velocity'
+1662602045072	Rename type 'Bullet'

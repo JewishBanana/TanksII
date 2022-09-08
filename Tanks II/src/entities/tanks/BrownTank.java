@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import entities.Enemy;
 import entities.GameObject;
 import entities.ID;
-import entities.projectiles.Bullet;
+import entities.projectiles.Projectile;
 import entities.projectiles.RayCast;
 import general.Game;
 import general.Level;
@@ -28,9 +28,11 @@ public class BrownTank extends Enemy {
 			RayCast cast = rayCastForTarget(8, 3, 60, 90);
 			if (cast != null) {
 				shotCooldown = 180;
-				GameObject tempBullet = new Bullet(level, x+(width/2), y+(height/2), 8, 8, ID.BULLET, this);
+				GameObject tempBullet = new Projectile(level, x+(width/2), y+(height/2), 8, 8, ID.BULLET, this);
 				Game.handler.addObject(tempBullet);
-				tempBullet.setVelocity(cast.getVelX()/2, cast.getVelY()/2);
+				tempBullet.setVelocity(cast.getVelocity().normalize().multiply(8));
+				System.out.println(cast.getVelocity().getX()+" "+cast.getVelocity().getY());
+				System.out.println(cast.getVelocity().normalize().getX()+" "+cast.getVelocity().normalize().getY());
 			}
 		}
 		shotCooldown--;
