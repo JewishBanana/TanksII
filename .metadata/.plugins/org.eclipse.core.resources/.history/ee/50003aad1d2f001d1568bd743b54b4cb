@@ -15,12 +15,9 @@ public class RayCast extends GameObject {
 	
 	private GameObject shooter;
 	private int bounces;
-	private double posX,posY;
 
 	public RayCast(Level level, double x, double y, double width, double height, GameObject shooter) {
 		super(level, x, y, width, height);
-		this.posX = x;
-		this.posY = y;
 		this.shooter = shooter;
 	}
 	@Override
@@ -33,10 +30,10 @@ public class RayCast extends GameObject {
 		this.velocity = castVelocity.clone();
 		for (int i=0; i < lifeSpan; i++) {
 			TileFace face = simulateMapCollsions(false);
-//			if (face == null)
-//				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.green));
-//			else
-//				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.blue));
+			if (face == null)
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.green));
+			else
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.blue));
 			if (face == TileFace.RIGHT || face == TileFace.LEFT) {
 				castVelocity.reverseXVel();
 				bounces++;
@@ -65,17 +62,5 @@ public class RayCast extends GameObject {
 	}
 	public void setBounces(int bounces) {
 		this.bounces = bounces;
-	}
-	public double getPosX() {
-		return posX;
-	}
-	public void setPosX(double posX) {
-		this.posX = posX;
-	}
-	public double getPosY() {
-		return posY;
-	}
-	public void setPosY(double posY) {
-		this.posY = posY;
 	}
 }

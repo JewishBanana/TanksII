@@ -33,10 +33,10 @@ public class RayCast extends GameObject {
 		this.velocity = castVelocity.clone();
 		for (int i=0; i < lifeSpan; i++) {
 			TileFace face = simulateMapCollsions(false);
-//			if (face == null)
-//				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.green));
-//			else
-//				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.blue));
+			if (face == null)
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.green));
+			else
+				Game.handler.addParticle(new Particle(level, x, y, width, height, 250, Color.blue));
 			if (face == TileFace.RIGHT || face == TileFace.LEFT) {
 				castVelocity.reverseXVel();
 				bounces++;
