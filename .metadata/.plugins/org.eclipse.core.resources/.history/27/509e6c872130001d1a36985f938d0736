@@ -90,6 +90,6 @@ public class Player extends InputGameObject implements Shooter {
 		this.setVelocity(new Velocity());
 	}
 	public void mouseMoved(MouseEvent e) {
-		gunAngle = Math.atan2(e.getY() - y-(height/2)+Camera.getY(), e.getX() - x-(width/2)+Camera.getX());
+		gunAngle = Math.atan2(e.getY() - y-16+Camera.getY(), e.getX() - x-16+Camera.getX());
 	}
 }

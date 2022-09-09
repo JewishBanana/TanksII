@@ -84,12 +84,12 @@ public class Player extends InputGameObject implements Shooter {
 		Projectile tempBullet = new Projectile(level, x+(width/2)-4, y+(height/2)-4, 8, 8, ID.BULLET, this);
 		Game.handler.addObject(tempBullet);
 		projectiles.add(tempBullet);
-		double angle = Math.atan2(e.getY() - y-(height/2)+Camera.getY(), e.getX() - x-(width/2)+Camera.getX());
+		double angle = Math.atan2(e.getY() - y+(height/2)+Camera.getY(), e.getX() - x+(width/2)+Camera.getX());
 		tempBullet.setVelocity(new Velocity(Math.cos(angle), Math.sin(angle)).normalize().multiply(10));
 		stallTicks = 20;
 		this.setVelocity(new Velocity());
 	}
 	public void mouseMoved(MouseEvent e) {
-		gunAngle = Math.atan2(e.getY() - y-(height/2)+Camera.getY(), e.getX() - x-(width/2)+Camera.getX());
+		gunAngle = Math.atan2(e.getY() - y+(height/2)+Camera.getY(), e.getX() - x+(width/2)+Camera.getX());
 	}
 }
