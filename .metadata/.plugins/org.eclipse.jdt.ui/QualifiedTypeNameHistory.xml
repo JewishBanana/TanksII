@@ -30,4 +30,5 @@
     <fullyQualifiedTypeName name="entities.particles.Particle"/>
     <fullyQualifiedTypeName name="java.awt.Color"/>
     <fullyQualifiedTypeName name="java.util.ArrayDeque"/>
+    <fullyQualifiedTypeName name="util.Velocity"/>
 </qualifiedTypeNameHistroy>

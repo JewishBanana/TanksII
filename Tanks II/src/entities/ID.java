@@ -5,4 +5,7 @@ public enum ID {
 	BROWNTANK(),
 	BLOCK(),
 	BULLET(),
+	
+	PARTICLE(),
+	RAYCAST()
 }

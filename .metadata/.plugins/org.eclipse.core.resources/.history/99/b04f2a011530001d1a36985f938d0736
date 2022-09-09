@@ -1,0 +1,28 @@
+package input;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+import entities.GameObject;
+import entities.ID;
+import entities.InputGameObject;
+import entities.projectiles.Projectile;
+import general.Camera;
+import general.Handler;
+import util.Velocity;
+
+public class MouseInput extends MouseAdapter {
+	
+	private Handler handler;
+	
+	public Queue<InputGameObject> mouseListener = new ArrayDeque<>();
+	
+	public MouseInput(Handler handler, Camera cam) {
+		this.handler = handler;
+	}
+	public void mousePressed(MouseEvent e) {
+		mouseListener.forEach(c -> c.mousePressed(e));
+	}
+}

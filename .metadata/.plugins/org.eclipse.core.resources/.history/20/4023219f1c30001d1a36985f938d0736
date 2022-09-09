@@ -1,0 +1,103 @@
+package general;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import entities.ID;
+import entities.LivingEntity;
+import entities.Player;
+import entities.tanks.BrownTank;
+import objects.Tile;
+import objects.TileType;
+import objects.tiles.BoxTile;
+import objects.tiles.FloorTile;
+import objects.tiles.VoidTile;
+
+public class Level {
+	
+	private Game main;
+	private Handler handler;
+	private Tile[] tiles;
+	private int width,height;
+	private int tileSize = 64;
+	private Tile voidTile;
+	private LivingEntity target;
+	
+	public Level(Game main, Handler handler) {
+		this.main = main;
+		this.handler = handler;
+	}
+	public void load(String path) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			System.out.println("File "+path+" does not exist!");
+			return;
+		}
+		voidTile = new VoidTile(this, 0, 0);
+		width = img.getWidth();
+		height = img.getHeight();
+		int[] pixels = new int[width * height];
+		img.getRGB(0, 0, width, height, pixels, 0, width);
+		tiles = new Tile[width * height];
+		for (int i=0; i < pixels.length; i++) {
+			int x = (i%width)*tileSize, y = (i/width)*tileSize;
+			switch (TileType.getTypeByHex(pixels[i])) {
+			case MAINPLAYER:
+				tiles[i] = new FloorTile(this, x, y);
+				target = new Player(this, x, y, tileSize, tileSize, ID.PLAYER);
+				handler.addObject(target);
+				((Player) target).setController(main.input);
+				Camera.setTrackingObject(target);
+				break;
+			case BOXTILE:
+				tiles[i] = new BoxTile(this, x, y);
+				break;
+			case FLOORTILE:
+				tiles[i] = new FloorTile(this, x, y);
+				break;
+			case BASICENEMY:
+				tiles[i] = new FloorTile(this, x, y);
+				handler.addObject(new BrownTank(this, x, y, tileSize, tileSize, ID.BROWNTANK));
+				break;
+			default:
+				tiles[i] = new VoidTile(this, x, y);
+				break;
+			}
+		}
+		
+		Camera.setMaxX((img.getTileWidth() * tileSize) - Game.WIDTH + 12);
+		Camera.setMaxY((img.getTileHeight() * tileSize) - Game.HEIGHT + 35);
+	}
+	public void render(Graphics g) {
+		for (int x = (int) (Camera.getX()/tileSize); x <= Camera.getX()+(Game.WIDTH/tileSize); x++)
+			for (int y = (int) (Camera.getY()/tileSize); y <= Camera.getY()+(Game.HEIGHT/tileSize); y++)
+				getTileChunk(x, y).render(x*tileSize, y*tileSize, g);
+	}
+	public void clear() {
+
+	}
+	public Tile getTileChunk(int tileX, int tileY) {
+		int tile = (tileY * height) + tileX;
+		if (tile >= tiles.length || tile < 0)
+			return voidTile;
+		return tiles[tile];
+	}
+	public Tile getTile(double x, double y) {
+		int tile = (((int) y/tileSize) * height) + ((int) x/tileSize);
+		if (tile >= tiles.length || tile < 0)
+			return voidTile;
+		return tiles[tile];
+	}
+	public LivingEntity getTarget() {
+		return target;
+	}
+	public void setTarget(LivingEntity target) {
+		this.target = target;
+	}
+}

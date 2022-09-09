@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 import entities.ID;
 import entities.LivingEntity;
-import entities.Player;
 import entities.tanks.BrownTank;
+import entities.tanks.Player;
 import objects.Tile;
 import objects.TileType;
 import objects.tiles.BoxTile;
@@ -21,17 +21,15 @@ public class Level {
 	
 	private Game main;
 	private Handler handler;
-	private Camera cam;
 	private Tile[] tiles;
 	private int width,height;
 	private int tileSize = 64;
 	private Tile voidTile;
 	private LivingEntity target;
 	
-	public Level(Game main, Handler handler, Camera cam) {
+	public Level(Game main, Handler handler) {
 		this.main = main;
 		this.handler = handler;
-		this.cam = cam;
 	}
 	public void load(String path) {
 		BufferedImage img = null;
@@ -55,8 +53,7 @@ public class Level {
 				target = new Player(this, x, y, tileSize, tileSize, ID.PLAYER);
 				handler.addObject(target);
 				((Player) target).setController(main.input);
-				cam.findPlayer(target);
-				main.minput.findPlayer(target);
+				Camera.setTrackingObject(target);
 				break;
 			case BOXTILE:
 				tiles[i] = new BoxTile(this, x, y);
@@ -74,12 +71,12 @@ public class Level {
 			}
 		}
 		
-		cam.setMaxX((img.getTileWidth() * tileSize) - Game.WIDTH + 12);
-		cam.setMaxY((img.getTileHeight() * tileSize) - Game.HEIGHT + 35);
+		Camera.setMaxX((img.getTileWidth() * tileSize) - Game.WIDTH + 12);
+		Camera.setMaxY((img.getTileHeight() * tileSize) - Game.HEIGHT + 35);
 	}
 	public void render(Graphics g) {
-		for (int x = (int) (cam.getX()/tileSize); x <= cam.getX()+(Game.WIDTH/tileSize); x++)
-			for (int y = (int) (cam.getY()/tileSize); y <= cam.getY()+(Game.HEIGHT/tileSize); y++)
+		for (int x = (int) (Camera.getX()/tileSize); x <= Camera.getX()+(Game.WIDTH/tileSize); x++)
+			for (int y = (int) (Camera.getY()/tileSize); y <= Camera.getY()+(Game.HEIGHT/tileSize); y++)
 				getTileChunk(x, y).render(x*tileSize, y*tileSize, g);
 	}
 	public void clear() {

@@ -4,6 +4,10 @@ public class Velocity {
 	
 	private double x,y;
 	
+	public Velocity() {
+		this.x = 0.0D;
+		this.y = 0.0D;
+	}
 	public Velocity(double x, double y) {
 		this.x = x;
 		this.y = y;

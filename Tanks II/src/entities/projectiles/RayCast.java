@@ -1,11 +1,10 @@
 package entities.projectiles;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import entities.GameObject;
+import entities.ID;
 import entities.LivingEntity;
-import entities.particles.Particle;
 import general.Game;
 import general.Level;
 import objects.TileFace;
@@ -18,7 +17,7 @@ public class RayCast extends GameObject {
 	private double posX,posY;
 
 	public RayCast(Level level, double x, double y, double width, double height, GameObject shooter) {
-		super(level, x, y, width, height);
+		super(level, x, y, width, height, ID.RAYCAST);
 		this.posX = x;
 		this.posY = y;
 		this.shooter = shooter;

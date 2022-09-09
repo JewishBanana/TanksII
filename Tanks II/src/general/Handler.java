@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Queue;
 
 import entities.GameObject;
+import entities.ID;
 import entities.particles.Particle;
 
 public class Handler {
@@ -13,7 +14,6 @@ public class Handler {
 	private Queue<GameObject> objectList = new ArrayDeque<>();
 	private Queue<Particle> particlesList = new ArrayDeque<>();
 	private Level level;
-	private Camera cam;
 	
 	private Queue<GameObject> objectAddQueueList = new ArrayDeque<>();
 	private Queue<GameObject> objectRemoveQueueList = new ArrayDeque<>();
@@ -24,7 +24,7 @@ public class Handler {
 		Iterator<GameObject> handlerIterator = objectList.iterator();
 		while (handlerIterator.hasNext()) {
 			GameObject obj = handlerIterator.next();
-			if (obj == null || obj.isShouldRemove())
+			if (obj == null || obj.isDead())
 				handlerIterator.remove();
 			else
 				obj.tick(level);
@@ -48,11 +48,17 @@ public class Handler {
 		particleAddQueueList.clear();
 	}
 	public void render(Graphics g) {
+		Queue<GameObject> higherPriority = new ArrayDeque<>(objectList.size());
 		for (GameObject obj : objectList)
-			if (obj.getX()+obj.getWidth() >= cam.getX() && obj.getX() <= cam.getFarX() && obj.getY()+obj.getHeight() >= cam.getY() && obj.getY() <= cam.getFarY() && !obj.isShouldRemove())
-				obj.render(g);
+			if (obj.getX()+obj.getWidth() >= Camera.getX() && obj.getX() <= Camera.getFarX() && obj.getY()+obj.getHeight() >= Camera.getY() && obj.getY() <= Camera.getFarY() && !obj.isDead()) {
+				if (obj.getId() == ID.BULLET)
+					obj.render(g);
+				else
+					higherPriority.add(obj);
+			}
+		higherPriority.forEach(e -> e.render(g));
 		for (Particle particle : particlesList)
-			if (particle.getX()+particle.getWidth() >= cam.getX() && particle.getX() <= cam.getFarX() && particle.getY()+particle.getHeight() >= cam.getY() && particle.getY() <= cam.getFarY())
+			if (particle.getX()+particle.getWidth() >= Camera.getX() && particle.getX() <= Camera.getFarX() && particle.getY()+particle.getHeight() >= Camera.getY() && particle.getY() <= Camera.getFarY())
 				particle.render(g);
 	}
 	public void addObject(GameObject tempObject) {
@@ -72,12 +78,6 @@ public class Handler {
 	}
 	public void setLevel(Level level) {
 		this.level = level;
-	}
-	public Camera getCam() {
-		return cam;
-	}
-	public void setCam(Camera cam) {
-		this.cam = cam;
 	}
 	public Queue<GameObject> getObjectList() {
 		return objectList;

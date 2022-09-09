@@ -34,13 +34,13 @@ public class Projectile extends GameObject {
 			bounces++;
 		}
 		if (bounces >= 3)
-			shouldRemove = true;
+			dead = true;
 		addVelocity();
 		
 		for (GameObject obj : Game.handler.getObjectList())
 			if (obj instanceof LivingEntity && obj.collides(x, y, width, height) && !obj.equals(shooter)) {
 //				((LivingEntity) obj).explodeEntity();
-				shouldRemove = true;
+				dead = true;
 				return;
 			}
 	}

@@ -1,0 +1,15 @@
+package entities.tanks;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
+
+import entities.projectiles.Projectile;
+
+public interface Shooter {
+	
+	public Queue<Projectile> projectiles = new ArrayDeque<>();
+	
+	default int aliveProjectiles() {
+		return projectiles.size();
+	}
+}

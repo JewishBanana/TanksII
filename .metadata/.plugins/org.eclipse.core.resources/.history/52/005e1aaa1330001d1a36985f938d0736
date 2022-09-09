@@ -1,0 +1,8 @@
+package entities;
+
+public enum ID {
+	PLAYER(),
+	BROWNTANK(),
+	BLOCK(),
+	BULLET(),
+}

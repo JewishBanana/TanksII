@@ -13,7 +13,7 @@ public abstract class GameObject {
 	protected double width,height;
 	protected ID id;
 	protected Level level;
-	protected boolean shouldRemove;
+	protected boolean dead;
 	
 	public GameObject(Level level, double x, double y, double width, double height, ID id) {
 		this.level = level;
@@ -22,13 +22,6 @@ public abstract class GameObject {
 		this.width = width;
 		this.height = height;
 		this.id = id;
-	}
-	public GameObject(Level level, double x, double y, double width, double height) {
-		this.level = level;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
 	}
 	
 	public abstract void tick(Level level);
@@ -70,11 +63,11 @@ public abstract class GameObject {
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	public boolean isShouldRemove() {
-		return shouldRemove;
+	public boolean isDead() {
+		return dead;
 	}
-	public void setShouldRemove(boolean shouldRemove) {
-		this.shouldRemove = shouldRemove;
+	public void setDead(boolean dead) {
+		this.dead = dead;
 	}
 	public boolean collides(double tempX, double tempY, double tempWidth, double tempHeight) {
 		return (tempX+tempWidth > x && tempX < x+width && tempY+tempHeight > y && tempY < y+height);

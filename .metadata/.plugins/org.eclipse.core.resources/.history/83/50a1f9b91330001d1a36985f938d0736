@@ -1,0 +1,19 @@
+package entities;
+
+import java.awt.Graphics;
+
+import general.Level;
+
+public class InputGameObject extends GameObject {
+
+	public InputGameObject(Level level, double x, double y, double width, double height) {
+		super(level, x, y, width, height);
+	}
+	@Override
+	public void tick(Level level) {
+	}
+	@Override
+	public void render(Graphics g) {
+	}
+
+}

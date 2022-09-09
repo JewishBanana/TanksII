@@ -22,7 +22,6 @@ public class Game extends Canvas implements Runnable {
 	public static Handler handler;
 	public KeyInput input;
 	public MouseInput minput;
-	private Camera cam;
 	private Level level;
 	
 	public Game() {
@@ -36,13 +35,13 @@ public class Game extends Canvas implements Runnable {
 	private void init() {
 		handler = new Handler();
 		input = new KeyInput();
-		cam = new Camera(0, 0);
-		level = new Level(this, handler, cam);
+		new Camera(0, 0);
+		level = new Level(this, handler);
 		handler.setLevel(level);
-		handler.setCam(cam);
-		minput = new MouseInput(handler, cam);
+		minput = new MouseInput();
 		this.addKeyListener(input);
 		this.addMouseListener(minput);
+		this.addMouseMotionListener(minput);
 	}
 	private synchronized void start() {
 		if (isRunning) return;
@@ -92,7 +91,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	private void tick() {
 		handler.tick();
-		cam.tick();
+		Camera.tick();
 	}
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -106,12 +105,12 @@ public class Game extends Canvas implements Runnable {
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		g2d.translate(-cam.getX(), -cam.getY());
+		g2d.translate(-Camera.getX(), -Camera.getY());
 		
 		level.render(g);
 		handler.render(g);
 		
-		g2d.translate(cam.getX(), cam.getY());
+		g2d.translate(Camera.getX(), Camera.getY());
 		
 		bs.show();
 		g.dispose();

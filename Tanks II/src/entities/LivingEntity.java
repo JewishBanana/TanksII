@@ -19,7 +19,7 @@ public class LivingEntity extends GameObject {
 	public void render(Graphics g) {
 	}
 	public void explodeEntity() {
-		shouldRemove = true;
+		dead = true;
 		
 	}
 }

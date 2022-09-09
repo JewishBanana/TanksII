@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import entities.GameObject;
+import entities.ID;
 import general.Level;
 
 public class Particle extends GameObject {
@@ -13,11 +14,11 @@ public class Particle extends GameObject {
 	private Color color = Color.green;
 
 	public Particle(Level level, double x, double y, double width, double height, int lifeTicks) {
-		super(level, x, y, width, height);
+		super(level, x, y, width, height, ID.PARTICLE);
 		this.lifeTicks = lifeTicks;
 	}
 	public Particle(Level level, double x, double y, double width, double height, int lifeTicks, Color color) {
-		super(level, x, y, width, height);
+		super(level, x, y, width, height, ID.PARTICLE);
 		this.lifeTicks = lifeTicks;
 		this.color = color;
 	}

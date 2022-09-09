@@ -4,22 +4,19 @@ import entities.GameObject;
 
 public class Camera {
 	
-	private double x, y, maxX, maxY, farX, farY;
-	private GameObject tempPlayer;
+	private static double x, y, maxX, maxY, farX, farY;
+	private static GameObject trackingObject;
 	
-	public Camera(int x, int y) {
-		this.x = x;
-		this.y = y;
-		this.farX = x + Game.WIDTH;
-		this.farY = y + Game.HEIGHT;
+	public Camera(int camX, int camY) {
+		x = camX;
+		y = camY;
+		farX = x + Game.WIDTH;
+		farY = y + Game.HEIGHT;
 	}
-	public void findPlayer(GameObject player) {
-		this.tempPlayer = player;
-	}
-	public void tick() {
-		if (tempPlayer != null) {
-			x = tempPlayer.getX() - Game.WIDTH/2 + (tempPlayer.getWidth()/2);
-			y = tempPlayer.getY() - Game.HEIGHT/2 + (tempPlayer.getHeight()/2);
+	public static void tick() {
+		if (trackingObject != null) {
+			x = trackingObject.getX() - Game.WIDTH/2 + (trackingObject.getWidth()/2);
+			y = trackingObject.getY() - Game.HEIGHT/2 + (trackingObject.getHeight()/2);
 			if (x > maxX)
 				x = maxX;
 			else if (x < 0)
@@ -32,40 +29,46 @@ public class Camera {
 			farY = y + Game.HEIGHT;
 		}
 	}
-	public double getX() {
+	public static GameObject getTrackingObject() {
+		return trackingObject;
+	}
+	public static void setTrackingObject(GameObject object) {
+		trackingObject = object;
+	}
+	public static double getX() {
 		return x;
 	}
-	public void setX(double x) {
-		this.x = x;
+	public static void setX(double newX) {
+		x = newX;
 	}
-	public double getY() {
+	public static double getY() {
 		return y;
 	}
-	public void setY(double y) {
-		this.y = y;
+	public static void setY(double newY) {
+		y = newY;
 	}
-	public double getMaxX() {
+	public static double getMaxX() {
 		return maxX;
 	}
-	public void setMaxX(double maxX) {
-		this.maxX = maxX;
+	public static void setMaxX(double newMaxX) {
+		maxX = newMaxX;
 	}
-	public double getMaxY() {
+	public static double getMaxY() {
 		return maxY;
 	}
-	public void setMaxY(double maxY) {
-		this.maxY = maxY;
+	public static void setMaxY(double newMaxY) {
+		maxY = newMaxY;
 	}
-	public double getFarX() {
+	public static double getFarX() {
 		return farX;
 	}
-	public void setFarX(double farX) {
-		this.farX = farX;
+	public static void setFarX(double newFarX) {
+		farX = newFarX;
 	}
-	public double getFarY() {
+	public static double getFarY() {
 		return farY;
 	}
-	public void setFarY(double farY) {
-		this.farY = farY;
+	public static void setFarY(double newFarY) {
+		farY = newFarY;
 	}
 }

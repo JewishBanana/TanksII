@@ -18,9 +18,9 @@ public class Enemy extends LivingEntity {
 		this.target = target;
 	}
 	public RayCast rayCastForTarget(double size, int bounces, int immuneFrames, int lifeSpan, double bulletSpeed) {
-		double angle = Math.PI/20;
+		double angle = Math.PI/30;
 		RayCast cast = null;
-		for (int i=0; i < 40; i++) {
+		for (int i=0; i < 60; i++) {
 			RayCast tempCast = new RayCast(level, x+(width/2)-(size/2), y+(height/2)-(size/2), size, size, this);
 			if (tempCast.simulateCast(target, new Velocity(Math.cos(i*angle), Math.sin(i*angle)).normalize().multiply(bulletSpeed), bounces, immuneFrames, lifeSpan))
 				if (cast == null || tempCast.getBounces() < cast.getBounces())
