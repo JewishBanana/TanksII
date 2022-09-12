@@ -1,7 +1,7 @@
 package entities.particles;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import entities.GameObject;
 import entities.ID;
@@ -23,10 +23,10 @@ public class Particle extends GameObject {
 		this.color = color;
 	}
 	@Override
-	public void tick(Level level) {
+	public void tick() {
 	}
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		g.setColor(color);
 		g.drawOval((int) (x-(width/2)), (int) (y-(height/2)), (int)width, (int)height);
 	}

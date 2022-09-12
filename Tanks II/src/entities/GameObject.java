@@ -1,6 +1,6 @@
 package entities;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import general.Level;
 import objects.Tile;
@@ -24,8 +24,8 @@ public abstract class GameObject {
 		this.id = id;
 	}
 	
-	public abstract void tick(Level level);
-	public abstract void render(Graphics g);
+	public abstract void tick();
+	public abstract void render(Graphics2D g);
 
 	public double getX() {
 		return x;

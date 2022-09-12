@@ -1,6 +1,6 @@
 package entities;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import general.Level;
 
@@ -13,10 +13,10 @@ public class LivingEntity extends GameObject {
 		super(level, x, y, width, height, id);
 	}
 	@Override
-	public void tick(Level level) {
+	public void tick() {
 	}
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 	}
 	public void explodeEntity() {
 		dead = true;

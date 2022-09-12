@@ -1,6 +1,6 @@
 package general;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
@@ -27,7 +27,7 @@ public class Handler {
 			if (obj == null || obj.isDead())
 				handlerIterator.remove();
 			else
-				obj.tick(level);
+				obj.tick();
 		}
 		objectList.removeAll(objectRemoveQueueList);
 		objectRemoveQueueList.clear();
@@ -47,7 +47,7 @@ public class Handler {
 		particlesList.addAll(particleAddQueueList);
 		particleAddQueueList.clear();
 	}
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		Queue<GameObject> higherPriority = new ArrayDeque<>(objectList.size());
 		for (GameObject obj : objectList)
 			if (obj.getX()+obj.getWidth() >= Camera.getX() && obj.getX() <= Camera.getFarX() && obj.getY()+obj.getHeight() >= Camera.getY() && obj.getY() <= Camera.getFarY() && !obj.isDead()) {

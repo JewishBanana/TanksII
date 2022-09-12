@@ -1,6 +1,6 @@
 package entities.projectiles;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import entities.GameObject;
 import entities.ID;
@@ -23,10 +23,10 @@ public class RayCast extends GameObject {
 		this.shooter = shooter;
 	}
 	@Override
-	public void tick(Level level) {
+	public void tick() {
 	}
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 	}
 	public boolean simulateCast(GameObject target, Velocity castVelocity, int maxBounces, int immuneFrames, int lifeSpan) {
 		this.velocity = castVelocity.clone();

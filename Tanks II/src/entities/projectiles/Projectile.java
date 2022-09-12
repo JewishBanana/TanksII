@@ -1,7 +1,7 @@
 package entities.projectiles;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import entities.GameObject;
 import entities.ID;
@@ -23,7 +23,7 @@ public class Projectile extends GameObject {
 		this.shooter = shooter;
 	}
 	@Override
-	public void tick(Level level) {
+	public void tick() {
 		
 		TileFace face = simulateMapCollsions(false);
 		if (face == TileFace.RIGHT || face == TileFace.LEFT) {
@@ -42,11 +42,15 @@ public class Projectile extends GameObject {
 //				((LivingEntity) obj).explodeEntity();
 				dead = true;
 				return;
+			} else if (obj instanceof Projectile && !obj.equals(this) && obj.collides(x, y, width, height) && !obj.equals(shooter)) {
+				dead = true;
+				obj.setDead(true);
+				return;
 			}
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		g.setColor(Color.yellow);
 		g.fillRect((int)x, (int)y, (int)width, (int)height);
 	}

@@ -6,15 +6,15 @@ import util.Velocity;
 
 public class Enemy extends LivingEntity {
 	
-	protected LivingEntity target;
+	protected GameObject target;
 
 	public Enemy(Level level, double x, double y, double width, double height, ID id) {
 		super(level, x, y, width, height, id);
 	}
-	public LivingEntity getTarget() {
+	public GameObject getTarget() {
 		return target;
 	}
-	public void setTarget(LivingEntity target) {
+	public void setTarget(GameObject target) {
 		this.target = target;
 	}
 	public RayCast rayCastForTarget(double size, int bounces, int immuneFrames, int lifeSpan, double bulletSpeed) {

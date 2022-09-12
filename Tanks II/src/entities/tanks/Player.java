@@ -1,7 +1,6 @@
 package entities.tanks;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -13,6 +12,7 @@ import general.Camera;
 import general.Game;
 import general.Level;
 import input.KeyInput;
+import input.MouseInput;
 import util.Utils;
 import util.Velocity;
 
@@ -31,25 +31,26 @@ public class Player extends InputGameObject implements Shooter {
 	}
 
 	@Override
-	public void tick(Level level) {
+	public void tick() {
 		move();
 		
 		simulateMapCollsions(true);
 		addVelocity();
+		moveNozzle();
 		
 		shotCooldown--;
 		removeDeadProjectiles();
 	}
 	
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		g.setColor(Color.white);
 		g.fillRect((int)x, (int)y, (int)width, (int)height);
 		
 		Graphics2D g2d = (Graphics2D) g.create();
 		Rectangle rect2 = new Rectangle((int) (x+(width/2)), (int) (y+(height/3)), 60, 20);
 	    g2d.rotate(gunAngle, (int) (x+(width/2)), (int) (y+(height/2)));
-		g2d.setColor(Color.orange);
+		g2d.setColor(Color.magenta);
 		g2d.draw(rect2);
 		g2d.fill(rect2);
 		g2d.dispose();
@@ -89,7 +90,9 @@ public class Player extends InputGameObject implements Shooter {
 		stallTicks = 20;
 		this.setVelocity(new Velocity());
 	}
-	public void mouseMoved(MouseEvent e) {
-		gunAngle = Math.atan2(e.getY() - y-(height/2)+Camera.getY(), e.getX() - x-(width/2)+Camera.getX());
+	private void moveNozzle() {
+		if (shotCooldown > 0)
+			return;
+		gunAngle = Math.atan2(MouseInput.getMouseY() - y-(height/2)+Camera.getY(), MouseInput.getMouseX() - x-(width/2)+Camera.getX());
 	}
 }
