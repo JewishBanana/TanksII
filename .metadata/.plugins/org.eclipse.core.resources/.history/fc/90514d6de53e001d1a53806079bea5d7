@@ -6,9 +6,8 @@ import general.Level;
 
 public class LivingEntity extends GameObject {
 	
-	protected double health = 10.0;
-	protected double bulletDamage = 10.0;
-	protected double armor = 0.0;
+	protected double health;
+	protected double bulletDamage;
 
 	public LivingEntity(Level level, double x, double y, double width, double height, ID id) {
 		super(level, x, y, width, height, id);
@@ -20,9 +19,6 @@ public class LivingEntity extends GameObject {
 	public void render(Graphics2D g) {
 	}
 	public void damageEntity(double damage) {
-		this.health -= Math.max(damage - armor, 1.0);
-		if (health <= 0) {
-			dead = true;
-		}
+		this.health -= damage;
 	}
 }

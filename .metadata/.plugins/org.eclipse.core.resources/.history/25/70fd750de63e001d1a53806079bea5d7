@@ -85,7 +85,6 @@ public class Player extends InputGameObject implements Shooter {
 		double angle = Math.atan2(e.getY() - y-(height/2)+Camera.getY(), e.getX() - x-(width/2)+Camera.getX());
 		tempBullet.setVelocity(new Velocity(Math.cos(angle), Math.sin(angle)).normalize().multiply(10));
 		tempBullet.setBounces(2);
-		tempBullet.setDamage(bulletDamage);
 		Game.handler.addObject(tempBullet);
 		projectiles.add(tempBullet);
 		stallTicks = 20;

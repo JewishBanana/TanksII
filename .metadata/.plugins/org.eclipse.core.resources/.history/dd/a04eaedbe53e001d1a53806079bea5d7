@@ -13,9 +13,9 @@ import objects.TileFace;
 public class Projectile extends GameObject {
 	
 	protected GameObject shooter;
-	protected int immuneFrames = 20;
-	protected int bounces = 1;
+	protected int bounces = 1,immuneFrames = 60;
 	protected double damage = 10.0;
+	protected double speed = 10.0;
 
 	public Projectile(Level level, double x, double y, double width, double height, ID id) {
 		super(level, x, y, width, height, id);
@@ -39,16 +39,15 @@ public class Projectile extends GameObject {
 		addVelocity();
 		
 		for (GameObject obj : Game.handler.getObjectList())
-			if (obj instanceof LivingEntity && obj.collides(x, y, width, height) && (immuneFrames <= 0 || !obj.equals(shooter))) {
+			if (obj instanceof LivingEntity && obj.collides(x, y, width, height) && !obj.equals(shooter)) {
 //				((LivingEntity) obj).damageEntity(damage);
 				dead = true;
 				return;
-			} else if (obj instanceof Projectile && !obj.equals(this) && obj.collides(x, y, width, height)) {
+			} else if (obj instanceof Projectile && !obj.equals(this) && obj.collides(x, y, width, height) && !obj.equals(shooter)) {
 				dead = true;
 				obj.setDead(true);
 				return;
 			}
-		immuneFrames--;
 	}
 
 	@Override
@@ -79,5 +78,11 @@ public class Projectile extends GameObject {
 	}
 	public void setDamage(double damage) {
 		this.damage = damage;
+	}
+	public double getSpeed() {
+		return speed;
+	}
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 }

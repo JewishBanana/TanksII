@@ -20,7 +20,7 @@ public class LivingEntity extends GameObject {
 	public void render(Graphics2D g) {
 	}
 	public void damageEntity(double damage) {
-		this.health -= Math.max(damage - armor, 1.0);
+		this.health -= (damage - armor);
 		if (health <= 0) {
 			dead = true;
 		}

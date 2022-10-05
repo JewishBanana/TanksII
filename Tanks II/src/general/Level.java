@@ -86,7 +86,7 @@ public class Level {
 
 	}
 	public Tile getTileChunk(int tileX, int tileY) {
-		if (tileX >= width || tileY >= height)
+		if (tileX >= width || tileY >= height || tileX < 0 || tileY < 0)
 			return voidTile;
 		int tile = (tileY * height) + tileX;
 		if (tile >= tiles.length || tile < 0)

@@ -117,10 +117,10 @@ public class Game extends Canvas implements Runnable {
 		g2d.translate(Camera.getX(), Camera.getY());
 		
 		g.drawImage(screen, 0, 0, fullWidth, fullHeight, null);
-		
+		this.repaint();
 		g2d.dispose();
 		g.dispose();
-		bs.show();
+//		bs.show();
 		System.gc();
 	}
 	public static void main(String args[]) {
