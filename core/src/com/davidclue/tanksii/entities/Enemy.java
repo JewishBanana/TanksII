@@ -1,0 +1,31 @@
+package com.davidclue.tanksii.entities;
+
+import com.davidclue.tanksii.Level;
+import com.davidclue.tanksii.entities.projectiles.RayCast;
+import com.davidclue.tanksii.util.Velocity;
+
+public class Enemy extends LivingEntity {
+	
+	protected Entity target;
+
+	public Enemy(Level level, double x, double y, double width, double height, ID id) {
+		super(level, x, y, width, height, id);
+	}
+	public Entity getTarget() {
+		return target;
+	}
+	public void setTarget(Entity target) {
+		this.target = target;
+	}
+	public RayCast rayCastForTarget(double size, int bounces, int immuneFrames, int lifeSpan, double bulletSpeed) {
+		double angle = Math.PI/30;
+		RayCast cast = null;
+		for (int i=0; i < 60; i++) {
+			RayCast tempCast = new RayCast(level, x+(width/2)-(size/2), y+(height/2)-(size/2), size, size, this);
+			if (tempCast.simulateCast(target, new Velocity(Math.cos(i*angle), Math.sin(i*angle)).normalize().multiply(bulletSpeed), bounces, immuneFrames, lifeSpan))
+				if (cast == null || tempCast.getBounces() < cast.getBounces())
+					cast = tempCast;
+		}
+		return cast;
+	}
+}

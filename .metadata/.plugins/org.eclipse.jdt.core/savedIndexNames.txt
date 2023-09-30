@@ -1,4 +1,0 @@
-INDEX VERSION 1.131+C:\Users\david\Documents\GitHub\TanksII\.metadata\.plugins\org.eclipse.jdt.core
-1865797976.index
-1034055741.index
-633970006.index
