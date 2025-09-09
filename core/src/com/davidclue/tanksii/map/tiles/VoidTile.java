@@ -1,24 +1,21 @@
-package com.davidclue.tanksii.objects.tiles;
+package com.davidclue.tanksii.map.tiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.davidclue.tanksii.Level;
-import com.davidclue.tanksii.objects.Tile;
-import com.davidclue.tanksii.objects.TileType;
+import com.davidclue.tanksii.TanksII;
+import com.davidclue.tanksii.map.Tile;
 import com.davidclue.tanksii.rendering.Renderer;
 
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class VoidTile extends Tile {
 
-	public int width = 64,height = 64;
-	
 	public VoidTile(Level level, int tileX, int tileY) {
 		super(level, tileX, tileY);
-		this.type = TileType.VOIDTILE;
-		this.width = 64;
-		this.height = 64;
+		this.width = TanksII.tileSize;
+		this.height = TanksII.tileSize;
 	}
-	public void render(int x, int y, ShapeDrawer drawer) {
+	public void render(double x, double y, ShapeDrawer drawer) {
 		Renderer.renderRectangle(x, y, width, height, Color.BLACK);
 	}
 }

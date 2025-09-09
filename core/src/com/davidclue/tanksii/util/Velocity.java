@@ -34,6 +34,16 @@ public class Velocity {
 		this.x *= -1;
 		this.y *= -1;
 	}
+	public Velocity add(double x, double y) {
+		this.x += x;
+		this.y += y;
+		return this;
+	}
+	public Velocity subtract(double x, double y) {
+		this.x -= x;
+		this.y -= y;
+		return this;
+	}
 	public double getX() {
 		return x;
 	}
@@ -44,6 +54,10 @@ public class Velocity {
 		return y;
 	}
 	public void setY(double y) {
+		this.y = y;
+	}
+	public void set(double x, double y) {
+		this.x = x;
 		this.y = y;
 	}
 }

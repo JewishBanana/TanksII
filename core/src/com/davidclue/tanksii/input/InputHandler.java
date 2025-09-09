@@ -6,13 +6,12 @@ import java.util.Queue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.davidclue.tanksii.TanksII;
-import com.davidclue.tanksii.entities.InputGameObject;
 
 public class InputHandler implements InputProcessor {
 
 	private static double mouseX, mouseY;
 	
-	public static Queue<InputGameObject> mouseListener = new ArrayDeque<>();
+	public static Queue<InputAdapter> mouseListener = new ArrayDeque<>();
 	
 	public InputHandler(TanksII game) {
 		Gdx.input.setInputProcessor(this);

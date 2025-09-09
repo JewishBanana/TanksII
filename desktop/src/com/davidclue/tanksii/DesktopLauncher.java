@@ -9,8 +9,8 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(0);
 		config.setTitle("Tanks II");
-		config.setWindowedMode(1600, 800);
-		config.useVsync(false);
+		config.setWindowedMode(TanksII.WIDTH, TanksII.HEIGHT);
+		config.useVsync(true);
 		new Lwjgl3Application(new TanksII(), config);
 	}
 }

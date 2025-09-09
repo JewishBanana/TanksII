@@ -4,8 +4,11 @@ import com.davidclue.tanksii.entities.Entity;
 
 public class Camera {
 	
-	private static double x, y, maxX, maxY, farX, farY;
-	private static Entity trackingObject;
+	private double x, y, maxX, maxY, farX, farY;
+	private double zoom = 1.0;
+	private Entity trackingObject;
+	private int tileWidth, tileHeight;
+//	private boolean zoomTest;
 	
 	public Camera(int camX, int camY) {
 		x = camX;
@@ -13,62 +16,96 @@ public class Camera {
 		farX = x + TanksII.WIDTH;
 		farY = y + TanksII.HEIGHT;
 	}
-	public static void tick() {
+	public void tick() {
+//		if (!zoomTest) {
+//			setZoom(zoom += 0.01);
+//			if (zoom > 3.0)
+//				zoomTest = true;
+//		} else {
+//			setZoom(zoom -= 0.005);
+//			if (zoom < 0.01)
+//				zoomTest = false;
+//		}
 		if (trackingObject != null) {
-			x = trackingObject.getX() - TanksII.WIDTH/2 + (trackingObject.getWidth()/2);
-			y = trackingObject.getY() - TanksII.HEIGHT/2 + (trackingObject.getHeight()/2);
-			x = x < 0 ? 0 : x > maxX ? maxX : x;
-			y = y < 0 ? 0 : y > maxY ? maxY : y;
-			farX = x + TanksII.WIDTH;
-			farY = y + TanksII.HEIGHT;
+			x = (trackingObject.getX() + (trackingObject.getWidth() / 2) - (TanksII.WIDTH / 2 / zoom));
+			y = (trackingObject.getY() + (trackingObject.getHeight() / 2) - (TanksII.HEIGHT / 2 / zoom));
+			x = x < 0 ? maxX > 0 ? 0 : maxX / 2 : x > maxX ? maxX > 0 ? maxX : maxX / 2 : x;
+			y = y < 0 ? maxY > 0 ? 0 : maxY / 2 : y > maxY ? maxY > 0 ? maxY : maxY / 2 : y;
+			farX = x + (TanksII.WIDTH / zoom);
+			farY = y + (TanksII.HEIGHT / zoom);
 		}
 	}
-	public static float getFixedX(double tempX) {
-		return (float) (tempX - x);
+	public void setZoom(double multiplier) {
+		zoom = multiplier;
+		maxX = Math.min((tileWidth * TanksII.tileSize) - (TanksII.WIDTH / zoom / 2), (tileWidth * TanksII.tileSize) - (TanksII.WIDTH / zoom));
+		maxY = Math.min((tileHeight * TanksII.tileSize) - (TanksII.HEIGHT / zoom / 2), (tileHeight * TanksII.tileSize) - (TanksII.HEIGHT / zoom));
 	}
-	public static float getFixedY(double tempY) {
-		return (float) (tempY - y);
+	public double getZoom() {
+		return zoom;
 	}
-	public static Entity getTrackingObject() {
+	public float getScreenX(double objX) {
+		return (float) ((objX - x) * zoom);
+	}
+	public float getScreenY(double objY) {
+		return (float) ((objY - y) * zoom);
+	}
+	public double getLevelX(double screenX) {
+		return screenX / zoom + x;
+	}
+	public double getLevelY(double screenY) {
+		return screenY / zoom + y;
+	}
+	public Entity getTrackingObject() {
 		return trackingObject;
 	}
-	public static void setTrackingObject(Entity object) {
+	public void setTrackingObject(Entity object) {
 		trackingObject = object;
 	}
-	public static double getX() {
+	public double getX() {
 		return x;
 	}
-	public static void setX(double newX) {
+	public void setX(double newX) {
 		x = newX;
 	}
-	public static double getY() {
+	public double getY() {
 		return y;
 	}
-	public static void setY(double newY) {
+	public void setY(double newY) {
 		y = newY;
 	}
-	public static double getMaxX() {
+	public double getMaxX() {
 		return maxX;
 	}
-	public static void setMaxX(double newMaxX) {
+	public void setMaxX(double newMaxX) {
 		maxX = newMaxX;
 	}
-	public static double getMaxY() {
+	public double getMaxY() {
 		return maxY;
 	}
-	public static void setMaxY(double newMaxY) {
+	public void setMaxY(double newMaxY) {
 		maxY = newMaxY;
 	}
-	public static double getFarX() {
+	public double getFarX() {
 		return farX;
 	}
-	public static void setFarX(double newFarX) {
+	public void setFarX(double newFarX) {
 		farX = newFarX;
 	}
-	public static double getFarY() {
+	public double getFarY() {
 		return farY;
 	}
-	public static void setFarY(double newFarY) {
+	public void setFarY(double newFarY) {
 		farY = newFarY;
+	}
+	public void setTileDimensions(int tileWidth, int tileHeight) {
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		setZoom(zoom);
+	}
+	public int getTileWidth() {
+		return tileWidth;
+	}
+	public int getTileHeight() {
+		return tileHeight;
 	}
 }

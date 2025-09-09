@@ -1,13 +1,9 @@
 package com.davidclue.tanksii.entities.projectiles;
 
-import com.badlogic.gdx.graphics.Color;
 import com.davidclue.tanksii.Level;
-import com.davidclue.tanksii.TanksII;
 import com.davidclue.tanksii.entities.Entity;
-import com.davidclue.tanksii.entities.ID;
 import com.davidclue.tanksii.entities.LivingEntity;
-import com.davidclue.tanksii.entities.particles.Particle;
-import com.davidclue.tanksii.objects.TileFace;
+import com.davidclue.tanksii.map.TileFace;
 import com.davidclue.tanksii.util.Velocity;
 
 public class RayCast extends Entity {
@@ -17,7 +13,9 @@ public class RayCast extends Entity {
 	private double posX,posY;
 
 	public RayCast(Level level, double x, double y, double width, double height, Entity shooter) {
-		super(level, x, y, width, height, ID.RAYCAST);
+		super(level, x, y);
+		this.width = width;
+		this.height = height;
 		this.posX = x;
 		this.posY = y;
 		this.shooter = shooter;
@@ -27,9 +25,9 @@ public class RayCast extends Entity {
 		for (int i=0; i < lifeSpan; i++) {
 			TileFace face = simulateMapCollsions(false);
 //			if (face == null)
-//				TanksII.handler.addParticle(new Particle(level, x, y, width, height, 60, Color.GREEN));
+//				level.handler.addParticle(new Particle(level, x, y, width, height, 60, Color.GREEN));
 //			else
-//				TanksII.handler.addParticle(new Particle(level, x, y, width, height, 60, Color.BLUE));
+//				level.handler.addParticle(new Particle(level, x, y, width, height, 60, Color.BLUE));
 			if (face == TileFace.RIGHT || face == TileFace.LEFT) {
 				castVelocity.reverseXVel();
 				bounces++;
@@ -43,7 +41,7 @@ public class RayCast extends Entity {
 			}
 			x += castVelocity.getX();
 			y += castVelocity.getY();
-			for (Entity obj : TanksII.handler.getObjectList())
+			for (Entity obj : level.handler.getObjectList())
 				if (obj instanceof LivingEntity && obj.collides(x, y, width, height)) {
 					if (obj.equals(shooter) && immuneFrames > 0)
 						break;

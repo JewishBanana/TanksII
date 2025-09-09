@@ -3,13 +3,10 @@ package com.davidclue.tanksii.entities.tanks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
-import com.davidclue.tanksii.Camera;
 import com.davidclue.tanksii.Level;
-import com.davidclue.tanksii.TanksII;
-import com.davidclue.tanksii.entities.ID;
-import com.davidclue.tanksii.entities.InputGameObject;
+import com.davidclue.tanksii.entities.LivingEntity;
 import com.davidclue.tanksii.entities.projectiles.Projectile;
+import com.davidclue.tanksii.input.InputAdapter;
 import com.davidclue.tanksii.input.InputHandler;
 import com.davidclue.tanksii.rendering.Renderer;
 import com.davidclue.tanksii.util.Utils;
@@ -17,30 +14,58 @@ import com.davidclue.tanksii.util.Velocity;
 
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class Player extends InputGameObject implements Shooter {
+public class Player extends LivingEntity implements Shooter, InputAdapter {
 	
 	private double gunAngle;
 	private int stallTicks,shotCooldown;
+	private boolean colors;
 
-	public Player(Level level, double x, double y, double width, double height, ID id) {
-		super(level, x, y, width, height, id);
+	public Player(Level level, double x, double y) {
+		super(level, x, y);
+		this.movementSpeed = 5.0;
+		this.lighting = 0xF000;
 	}
-
 	@Override
 	public void tick() {
-		super.tick();
 		move();
 		moveNozzle();
 		
+		//cam changing
+		if (Gdx.input.isKeyJustPressed(Input.Keys.T))
+			this.level.camera.setTrackingObject(Utils.getRandomElement(this.level.getEntities(), e -> e instanceof LivingEntity && !e.isDead()));
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Y))
+			this.level.camera.setTrackingObject(this);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.U))
+			this.setImmune(!this.isImmune());
+		if (Gdx.input.isKeyJustPressed(Input.Keys.I))
+			this.colors = !colors;
+		if (colors) {
+			if (this.lighting >= 0xFFFF)
+				changeLighting(0xF000);
+			if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+				changeLighting(this.lighting + 1);
+				updateLight(true);
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.MINUS))
+			this.level.camera.setZoom(this.level.camera.getZoom() - 0.005);
+		if (Gdx.input.isKeyPressed(Input.Keys.EQUALS))
+			this.level.camera.setZoom(this.level.camera.getZoom() + 0.005);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.P))
+			Renderer.renderLighting = !Renderer.renderLighting;
+		
 		shotCooldown--;
 		removeDeadProjectiles();
+		
+		super.tick();
 	}
 	@Override
 	public void render(ShapeDrawer drawer) {
-		Renderer.renderRectangle(x, y, width, height, Color.WHITE);
-		drawer.setColor(Color.CORAL);
-		drawer.filledRectangle(new Rectangle((float)(Camera.getFixedX(x)+(width/2)+30), (float)(Camera.getFixedY(y)+(height/2)), 60, 20).setCenter((float)(Camera.getFixedX(x)+(width/2)), (float)(Camera.getFixedY(y)+(height/2))), (float) gunAngle, Color.CORAL, Color.CORAL);
-//		Renderer.renderRectangle(x+(width/2), y+(height/3), 60, 20, Color.CORAL, (float)gunAngle);
+		if (this.isImmune())
+			Renderer.renderRectangle(x, y, width, height, Color.NAVY);
+		else
+			Renderer.renderRectangle(x, y, width, height, Color.WHITE);
+		Renderer.renderRectangle(x+(width/2)-30, y+(height/2)-10, 60, 20, Color.CORAL, gunAngle);
 	}
 //	@Override
 //	public void render(aef) {
@@ -73,19 +98,29 @@ public class Player extends InputGameObject implements Shooter {
 			else if (velocity.getY() < 0) velocity.setY(velocity.getY()+decceleration);
 		}
 		
-		velocity.setX(Utils.clamp(velocity.getX(), -5, 5));
-		velocity.setY(Utils.clamp(velocity.getY(), -5, 5));
+		velocity.setX(Utils.clamp(velocity.getX(), -movementSpeed, movementSpeed));
+		velocity.setY(Utils.clamp(velocity.getY(), -movementSpeed, movementSpeed));
 	}
 	public void mousePressed(int button, int mouseX, int mouseY) {
-		if (button != 0 || shotCooldown > 0 || aliveProjectiles() >= 5 || dead)
+//		if (button == 1) {
+//			Tile tile = level.getTile(level.camera.getLevelX(mouseX), level.camera.getLevelY(mouseY));
+//			level.handler.addParticle(new Particle(level, tile.getX()+32, tile.getY()+32, 15, 15, 120));
+//			tile.setType(TileType.BOXTILE);
+//		} else {
+//			Tile tile = level.getTile(level.camera.getLevelX(mouseX), level.camera.getLevelY(mouseY));
+//			level.handler.addParticle(new Particle(level, tile.getX()+32, tile.getY()+32, 15, 15, 120));
+//			tile.setType(TileType.FLOORTILE);
+//		}
+		if (button != 0 || shotCooldown > 0 || aliveProjectiles() >= 5 || isDead())
 			return;
+		System.out.println(aliveProjectiles());
 		shotCooldown = 20;
-		Projectile tempBullet = new Projectile(level, x+(width/2)-4, y+(height/2)-4, 8, 8, ID.BULLET, this);
-		double angle = Math.atan2(mouseY - y-(height/2)+Camera.getY(), mouseX - x-(width/2)+Camera.getX());
+		Projectile tempBullet = new Projectile(level, x+(width/2)-4, y+(height/2)-4, 8, 8, this);
+		double angle = Math.atan2(mouseY - level.camera.getScreenY(y+height/2), mouseX - level.camera.getScreenX(x+width/2));
 		tempBullet.setVelocity(new Velocity(Math.cos(angle), Math.sin(angle)).normalize().multiply(10));
 		tempBullet.setBounces(2);
 		tempBullet.setDamage(bulletDamage);
-		TanksII.handler.addObject(tempBullet);
+		level.handler.addObject(tempBullet);
 		projectiles.add(tempBullet);
 		stallTicks = 20;
 		this.setVelocity(new Velocity());
@@ -93,6 +128,13 @@ public class Player extends InputGameObject implements Shooter {
 	private void moveNozzle() {
 		if (shotCooldown > 0)
 			return;
-		gunAngle = Math.atan2(InputHandler.getMouseY() - y-(height/2)+Camera.getY(), InputHandler.getMouseX() - x-(width/2)+Camera.getX());
+		gunAngle = Math.atan2(InputHandler.getMouseY() - level.camera.getScreenY(y+height/2), InputHandler.getMouseX() - level.camera.getScreenX(x+width/2));
+	}
+	@Override
+	public void mouseMoved() {
+	}
+	@Override
+	public void removeMouseListener() {
+		InputHandler.mouseListener.remove(this);
 	}
 }

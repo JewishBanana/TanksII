@@ -1,6 +1,10 @@
 package com.davidclue.tanksii;
 
+import java.io.File;
+
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -11,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.davidclue.tanksii.input.InputHandler;
 import com.davidclue.tanksii.rendering.Renderer;
+import com.davidclue.tanksii.scenes.LevelScene;
 
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
@@ -29,13 +34,10 @@ public class TanksII extends ApplicationAdapter {
 	private Texture texture;
 	private OrthographicCamera orthoCam;
 	
-	public static int WIDTH = 1600, HEIGHT = 900;
-	public int fullWidth, fullHeight;
+	public static int WIDTH = 1600, HEIGHT = 800;
 	public static int tileSize = 64;
-	public String title = "Tanks II";
 	
-	public static Handler handler;
-	private Level level;
+	private Scene scene;
 	
 	@Override
 	public void create() {
@@ -47,23 +49,26 @@ public class TanksII extends ApplicationAdapter {
 	    pixmap.dispose();
 	    TextureRegion region = new TextureRegion(texture);
 		drawer = new ShapeDrawer(batch, region);
-		Renderer.drawer = this.drawer;
 		
 		orthoCam = new OrthographicCamera();
 		orthoCam.setToOrtho(true);
 		batch.setProjectionMatrix(orthoCam.combined);
 		
-		handler = new Handler();
-		new Camera(0, 0);
 		new InputHandler(this);
-		level = new Level(this, handler);
-		handler.setLevel(level);
+		scene = new LevelScene("levels/default");
 		
-		level.load("levels/default/level1.png");
+		Renderer.init(drawer);
 	}
 	private void tick() {
-		handler.tick();
-		Camera.tick();
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+			if (Gdx.graphics.isFullscreen())
+				Gdx.graphics.setWindowedMode(1600, 800);
+			else
+				Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//			WIDTH = Gdx.graphics.getWidth();
+//			HEIGHT = Gdx.graphics.getHeight();
+		}
+		scene.tick();
 	}
 	@Override
 	public void render() {
@@ -87,8 +92,7 @@ public class TanksII extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 		batch.begin();
 		
-		level.render(drawer);
-		handler.render(drawer);
+		scene.render(drawer);
 		
 		batch.end();
 		frames++;
@@ -98,4 +102,14 @@ public class TanksII extends ApplicationAdapter {
 		batch.dispose();
 		texture.dispose();
 	}
+	public static void getAllFiles(File curDir) {
+        File[] filesList = curDir.listFiles();
+        for(File f : filesList){
+            if(f.isDirectory())
+                getAllFiles(f);
+            if(f.isFile()){
+                System.err.println(f.getName());
+            }
+        }
+    }
 }

@@ -8,11 +8,11 @@ import com.davidclue.tanksii.util.AIUtil;
 
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class BrownTank extends Enemy {
+public class GreenTank extends Enemy {
 	
 	private int shotCooldown = 180;
 
-	public BrownTank(Level level, double x, double y) {
+	public GreenTank(Level level, double x, double y) {
 		super(level, x, y);
 	}
 	@Override
@@ -23,7 +23,7 @@ public class BrownTank extends Enemy {
 			shotCooldown--;
 		if (shotCooldown == 0 && target != null) {
 			shotCooldown = 60;
-			if (shootAtTarget(8, 1, 60, 200, 8))
+			if (shootAtTarget(8, 5, 60, 400, 16))
 				shotCooldown = 180;
 		}
 		
@@ -31,6 +31,6 @@ public class BrownTank extends Enemy {
 	}
 	@Override
 	public void render(ShapeDrawer drawer) {
-		Renderer.renderRectangle(x, y, width, height, Color.BROWN);
+		Renderer.renderRectangle(x, y, width, height, Color.GREEN);
 	}
 }

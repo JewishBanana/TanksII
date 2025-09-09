@@ -16,7 +16,6 @@ public interface Shooter {
 			if (it.next().isDead())
 				it.remove();
 	}
-	
 	default int aliveProjectiles() {
 		return projectiles.size();
 	}
